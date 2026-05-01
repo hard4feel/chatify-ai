@@ -7,7 +7,7 @@ export const Route = createFileRoute("/business")({
 });
 
 function BusinessPage() {
-  return <ComingSoon icon={Briefcase} title="Luvvu Business" subtitle="Корпоративные решения для вашей команды" />;
+  return <ComingSoon icon={Briefcase} title="Luvvu Business" subtitle="Тёплая забота для команд и сообществ" />;
 }
 
 export function ComingSoon({ icon: Icon, title, subtitle }: { icon: typeof Briefcase; title: string; subtitle: string }) {

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Sparkles, Flame } from "lucide-react";
+import { ArrowUp } from "lucide-react";
+import heartLogo from "@/assets/luvvu-heart.png";
 
 export const Route = createFileRoute("/chat")({
   head: () => ({
@@ -27,7 +28,10 @@ function ChatPage() {
     setMessages((m) => [
       ...m,
       { role: "user", text: t },
-      { role: "assistant", text: "Это демо-интерфейс. Подключение к AI появится позже ✨" },
+      {
+        role: "assistant",
+        text: "Я рядом 💛 Это пока тёплая заглушка — настоящие ответы появятся, когда подключим AI.",
+      },
     ]);
     setInput("");
   };
@@ -48,7 +52,7 @@ function ChatPage() {
 
       <div className="border-t border-border bg-background/80 backdrop-blur">
         <form onSubmit={send} className="mx-auto flex max-w-3xl items-end gap-2 px-4 py-4">
-          <div className="flex flex-1 items-end rounded-2xl border border-input bg-card px-4 py-3 transition-colors focus-within:border-ember">
+          <div className="flex flex-1 items-end rounded-2xl border border-input bg-card px-4 py-3 transition-colors focus-within:border-ember focus-within:ring-4 focus-within:ring-ember/10">
             <textarea
               rows={1}
               value={input}
@@ -59,13 +63,13 @@ function ChatPage() {
                   send(e as unknown as React.FormEvent);
                 }
               }}
-              placeholder="Сообщение Luvvu…"
+              placeholder="Расскажи, что у тебя на душе…"
               className="max-h-40 flex-1 resize-none bg-transparent text-sm outline-none placeholder:text-muted-foreground"
             />
             <button
               type="submit"
               disabled={!input.trim()}
-              className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-ember text-ember-foreground transition-opacity disabled:opacity-30"
+              className="ml-2 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-ember text-ember-foreground transition-opacity disabled:opacity-30"
               aria-label="Отправить"
             >
               <ArrowUp className="h-4 w-4" />
@@ -73,7 +77,7 @@ function ChatPage() {
           </div>
         </form>
         <p className="pb-3 text-center text-[11px] text-muted-foreground">
-          Luvvu может ошибаться. Проверяйте важную информацию.
+          Luvvu — поддержка, а не замена специалиста. В кризисе обратись к врачу.
         </p>
       </div>
     </div>
@@ -84,16 +88,12 @@ function Bubble({ msg }: { msg: Msg }) {
   const isUser = msg.role === "user";
   return (
     <div className={`flex gap-3 ${isUser ? "justify-end" : "justify-start"}`}>
-      {!isUser && (
-        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-ember">
-          <Flame className="h-4 w-4 text-ember-foreground" />
-        </div>
-      )}
+      {!isUser && <img src={heartLogo} alt="" className="h-8 w-8 shrink-0" />}
       <div
         className={`max-w-[80%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed ${
           isUser
-            ? "bg-ember text-ember-foreground rounded-br-md"
-            : "bg-muted text-foreground rounded-bl-md"
+            ? "rounded-br-md bg-ember text-ember-foreground"
+            : "rounded-bl-md bg-muted text-foreground"
         }`}
       >
         {msg.text}
@@ -104,26 +104,26 @@ function Bubble({ msg }: { msg: Msg }) {
 
 function EmptyState({ onPick }: { onPick: (s: string) => void }) {
   const prompts = [
-    "Объясни квантовую запутанность простыми словами",
-    "Напиши план поста в блог про минимализм",
-    "Помоги составить расписание на неделю",
-    "Идеи для подарка лучшему другу",
+    "Мне сегодня тревожно, помоги выдохнуть",
+    "Я чувствую себя одиноко",
+    "Хочу найти своих людей — с чего начать?",
+    "Помоги разложить мысли по полочкам",
   ];
   return (
-    <div className="mx-auto flex h-full max-w-3xl flex-col items-center justify-center px-4 text-center">
-      <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-ember ember-glow">
-        <Sparkles className="h-6 w-6 text-ember-foreground" />
-      </div>
+    <div className="mx-auto flex h-full max-w-2xl flex-col items-center justify-center px-4 text-center">
+      <img src={heartLogo} alt="Luvvu" className="mb-4 h-20 w-20" />
       <h1 className="font-display text-3xl font-semibold tracking-tight md:text-4xl">
-        С чего начнём?
+        Привет. Я здесь, чтобы выслушать.
       </h1>
-      <p className="mt-2 text-sm text-muted-foreground">Задайте любой вопрос или выберите подсказку</p>
+      <p className="mt-3 text-sm text-muted-foreground md:text-base">
+        Расскажи, как ты, или начни с одной из мыслей ниже
+      </p>
       <div className="mt-8 grid w-full grid-cols-1 gap-2 sm:grid-cols-2">
         {prompts.map((p) => (
           <button
             key={p}
             onClick={() => onPick(p)}
-            className="rounded-xl border border-border bg-card px-4 py-3 text-left text-sm text-foreground/80 transition-all hover:border-ember/50 hover:text-foreground"
+            className="rounded-2xl border border-border bg-card px-4 py-3.5 text-left text-sm text-foreground/80 transition-all hover:-translate-y-0.5 hover:border-ember/40 hover:text-foreground"
           >
             {p}
           </button>
