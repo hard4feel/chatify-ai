@@ -1,67 +1,77 @@
 import streamlit as st
 import os
 from groq import Groq
+from utils import * # Импортируем твои утилиты, если они нужны
 
-# 1. ПОДКЛЮЧАЕМ ТВОЙ CSS
-def local_css(file_name):
-    with open(file_name) as f:
-        st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+# --- ЗАГРУЗКА ТВОЕГО ДИЗАЙНА ---
+def load_css(file_name):
+    if os.path.exists(file_name):
+        with open(file_name, "r", encoding="utf-8") as f:
+            st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
 
-# Проверяем, есть ли файл стиля в папке static (как у тебя в GitHub)
-if os.path.exists("static/style.css"):
-    local_css("static/style.css")
-else:
-    st.warning("Бро, не вижу static/style.css, проверь пути!")
+# Применяем твой стиль из папки static
+load_css("static/style.css")
 
-# 2. СЕКРЕТКИ (Берем из настроек Streamlit Cloud)
+# --- СЕКРЕТЫ (Для Streamlit Cloud) ---
 try:
-    client_groq = Groq(api_key=st.secrets["GROQ_API_KEY"])
-    LOGIN_USER = st.secrets["LOGIN_USER"]
-    LOGIN_PASSWORD = st.secrets["LOGIN_PASSWORD"]
+    GROQ_KEY = st.secrets["GROQ_API_KEY"]
+    L_USER = st.secrets["LOGIN_USER"]
+    L_PWD = st.secrets["LOGIN_PASSWORD"]
+    client = Groq(api_key=GROQ_KEY)
 except Exception as e:
-    st.error("Настрой Secrets в Streamlit! Нужны GROQ_API_KEY, LOGIN_USER, LOGIN_PASSWORD")
+    st.error("Бро, проверь Secrets в настройках Streamlit Cloud! Нужны: GROQ_API_KEY, LOGIN_USER, LOGIN_PASSWORD")
     st.stop()
 
-# 3. ЛОГИКА ВХОДА (Оставляем твою структуру)
+# --- ЛОГИКА ВХОДА ---
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
 if not st.session_state.auth:
-    # Здесь можно добавить твое лого из assets
-    # st.image("assets/logo.png", width=100) 
-    st.title("LUVVU SYSTEM")
-    u = st.text_input("LOGIN")
-    p = st.text_input("PASSWORD", type="password")
-    if st.button("ENTER"):
-        if u == LOGIN_USER and p == LOGIN_PASSWORD:
+    st.markdown('<div class="login-container">', unsafe_allow_html=True)
+    st.title("🌑 LUVVU OS LOGIN")
+    user_input = st.text_input("ID")
+    pass_input = st.text_input("KEY", type="password")
+    if st.button("INITIALIZE"):
+        if user_input == L_USER and pass_input == L_PWD:
             st.session_state.auth = True
             st.rerun()
+        else:
+            st.error("ACCESS DENIED")
+    st.markdown('</div>', unsafe_allow_html=True)
     st.stop()
 
-# 4. ОСНОВНОЙ КОНТЕНТ (Твой мудрый бро)
-st.title("Luvvu Intelligence")
+# --- ОСНОВНОЙ ИНТЕРФЕЙС ---
+st.title("🌑 Luvvu Intelligence")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Отображение чата
-for m in st.session_state.messages:
-    with st.chat_message(m["role"]):
-        st.markdown(m["content"])
+# Вывод сообщений (используем стандартные чат-элементы, которые подхватят твой CSS)
+for msg in st.session_state.messages:
+    with st.chat_message(msg["role"]):
+        st.write(msg["content"])
 
-if prompt := st.chat_input("На связи..."):
+# Поле ввода
+if prompt := st.chat_input("На связи, бро..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
-        st.markdown(prompt)
+        st.write(prompt)
 
     with st.chat_message("assistant"):
-        # Наш промпт
-        SYSTEM_PROMPT = "Ты — Luvvu AI, мудрый бро. Говоришь четко, по делу, поддерживаешь и решаешь вопросы."
-        
-        res = client_groq.chat.completions.create(
-            model="llama-3.3-70b-versatile",
-            messages=[{"role": "system", "content": SYSTEM_PROMPT}] + st.session_state.messages[-10:]
+        # Промпт Мудрого Бро
+        SYSTEM_PROMPT = (
+            "Ты — Luvvu AI, бро и цифровой ментор. Твой стиль — уверенный, лаконичный, пацанский, но глубоко мудрый. "
+            "Ты общаешься на 'ты'. Ты не робот, ты решала. Даешь жесткие и мудрые советы. "
+            "Ценишь стиль 'old money', дисциплину и бренд Erryssence."
         )
-        answer = res.choices[0].message.content
-        st.markdown(answer)
-        st.session_state.messages.append({"role": "assistant", "content": answer})
+        
+        try:
+            response = client.chat.completions.create(
+                model="llama-3.3-70b-versatile",
+                messages=[{"role": "system", "content": SYSTEM_PROMPT}] + st.session_state.messages[-10:]
+            )
+            answer = response.choices[0].message.content
+            st.write(answer)
+            st.session_state.messages.append({"role": "assistant", "content": answer})
+        except Exception as e:
+            st.error("Связь с ядром прервана. Проверь API ключ.")
