@@ -5,6 +5,6 @@ import { ComingSoon } from "./business";
 export const Route = createFileRoute("/connect")({
   head: () => ({ meta: [{ title: "Luvvu Connect — скоро" }] }),
   component: () => (
-    <ComingSoon icon={Plug} title="Luvvu Connect" subtitle="Интеграции с вашими любимыми сервисами" />
+    <ComingSoon icon={Plug} title="Luvvu Connect" subtitle="Найди своих — людей, которые поймут" />
   ),
 });

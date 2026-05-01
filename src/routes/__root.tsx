@@ -3,7 +3,8 @@ import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/lib/theme";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
-import { MessageSquare, Briefcase, Plug, Settings, LogOut, Menu, X, Flame } from "lucide-react";
+import { MessageSquare, Briefcase, Plug, Settings, LogOut, Menu } from "lucide-react";
+import heartLogo from "@/assets/luvvu-heart.png";
 
 function NotFoundComponent() {
   return (
@@ -24,14 +25,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Luvvu — минималистичный AI-чат" },
-      { name: "description", content: "Luvvu: чистый минималистичный интерфейс для общения с AI." },
+      { title: "Luvvu — тёплый AI для поддержки и своего круга" },
+      { name: "description", content: "Luvvu — уютный AI-собеседник, который поддержит и поможет найти своих." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" },
     ],
   }),
   shellComponent: RootShell,
@@ -115,7 +116,7 @@ function AuthedLayout() {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2 font-display font-semibold">
-            <Flame className="h-4 w-4 text-ember" />
+            <img src={heartLogo} alt="" className="h-5 w-5" />
             Luvvu
           </div>
           <div className="w-9" />
@@ -142,13 +143,11 @@ function Sidebar() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2 px-5 py-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-ember">
-          <Flame className="h-5 w-5 text-ember-foreground" />
-        </div>
+      <div className="flex items-center gap-3 px-5 py-5">
+        <img src={heartLogo} alt="Luvvu" className="h-10 w-10" />
         <div>
-          <div className="font-display text-lg font-semibold leading-none">Luvvu</div>
-          <div className="text-xs text-muted-foreground">минималистичный AI</div>
+          <div className="font-display text-xl font-semibold leading-none">Luvvu</div>
+          <div className="mt-1 text-xs text-muted-foreground">тёплый AI рядом с тобой</div>
         </div>
       </div>
 

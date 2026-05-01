@@ -1,13 +1,13 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState } from "react";
 import { useAuth } from "@/lib/auth";
-import { Flame } from "lucide-react";
+import heartLogo from "@/assets/luvvu-heart.png";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Войти — Luvvu" },
-      { name: "description", content: "Вход в Luvvu" },
+      { name: "description", content: "Войди в Luvvu — тёплый AI для поддержки." },
     ],
   }),
   component: LoginPage,
@@ -28,17 +28,17 @@ function LoginPage() {
 
   return (
     <div className="relative flex min-h-screen items-center justify-center overflow-hidden bg-background px-4">
-      {/* ambient ember glow */}
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-[500px] w-[500px] -translate-x-1/2 rounded-full bg-ember/20 blur-3xl" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-72 w-72 rounded-full bg-ember/10 blur-3xl" />
+      {/* мягкое тёплое свечение */}
+      <div className="pointer-events-none absolute -top-40 left-1/3 h-[520px] w-[520px] rounded-full bg-ember/15 blur-3xl" />
+      <div className="pointer-events-none absolute bottom-0 right-0 h-80 w-80 rounded-full bg-ember/10 blur-3xl" />
 
       <div className="relative w-full max-w-sm">
         <div className="mb-10 flex flex-col items-center text-center">
-          <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-ember ember-glow">
-            <Flame className="h-7 w-7 text-ember-foreground" />
-          </div>
-          <h1 className="font-display text-3xl font-semibold tracking-tight">Добро пожаловать</h1>
-          <p className="mt-2 text-sm text-muted-foreground">Войдите, чтобы продолжить в Luvvu</p>
+          <img src={heartLogo} alt="Luvvu" className="mb-3 h-20 w-20" />
+          <h1 className="font-display text-3xl font-semibold tracking-tight">С возвращением</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            Тёплое место, где тебя слышат
+          </p>
         </div>
 
         <form onSubmit={submit} className="space-y-4">
@@ -49,8 +49,8 @@ function LoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@luvvu.ai"
-              className="h-11 w-full rounded-lg border border-input bg-card px-4 text-sm outline-none transition-colors focus:border-ember focus:ring-2 focus:ring-ember/20"
+              placeholder="ты@luvvu.ai"
+              className="h-12 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none transition-all focus:border-ember focus:ring-4 focus:ring-ember/15"
             />
           </div>
           <div className="space-y-1.5">
@@ -61,19 +61,19 @@ function LoginPage() {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
-              className="h-11 w-full rounded-lg border border-input bg-card px-4 text-sm outline-none transition-colors focus:border-ember focus:ring-2 focus:ring-ember/20"
+              className="h-12 w-full rounded-xl border border-input bg-card px-4 text-sm outline-none transition-all focus:border-ember focus:ring-4 focus:ring-ember/15"
             />
           </div>
           <button
             type="submit"
-            className="h-11 w-full rounded-lg bg-ember text-sm font-medium text-ember-foreground transition-transform hover:scale-[1.01] active:scale-[0.99]"
+            className="h-12 w-full rounded-xl bg-ember text-sm font-semibold text-ember-foreground shadow-lg shadow-ember/20 transition-transform hover:scale-[1.01] active:scale-[0.99]"
           >
             Войти
           </button>
         </form>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Нет аккаунта? <span className="text-ember">Создайте</span> — это демо, любой ввод работает.
+          Здесь не нужно быть идеальным. Просто будь собой.
         </p>
       </div>
     </div>
