@@ -1,57 +1,60 @@
 import streamlit as st
 import os
 from groq import Groq
-from utils import * # Импортируем твои утилиты, если они нужны
 
-# --- ЗАГРУЗКА ТВОЕГО ДИЗАЙНА ---
-def load_css(file_name):
-    if os.path.exists(file_name):
-        with open(file_name, "r", encoding="utf-8") as f:
+# 1. ЗАГРУЗКА ТВОЕГО ДИЗАЙНА (Исправляем пути)
+def load_css(file_path):
+    if os.path.exists(file_path):
+        with open(file_path, "r", encoding="utf-8") as f:
             st.markdown(f'<style>{f.read()}</style>', unsafe_allow_html=True)
+    else:
+        # Если файл не найден, выведем инфо для отладки
+        st.sidebar.error(f"Файл {file_path} не найден!")
 
-# Применяем твой стиль из папки static
+# Пытаемся подгрузить стиль. У тебя на гитхабе он в static/style.css
 load_css("static/style.css")
 
-# --- СЕКРЕТЫ (Для Streamlit Cloud) ---
+# 2. ИМПОРТ ТВОИХ УТИЛИТ (С учетом регистра)
 try:
-    GROQ_KEY = st.secrets["GROQ_API_KEY"]
+    import Utils  # Импорт именно с большой буквы, как в репозитории
+except ImportError:
+    pass # Если не критично, просто идем дальше
+
+# 3. СЕКРЕТЫ (Берем напрямую из Streamlit Cloud)
+try:
+    client = Groq(api_key=st.secrets["GROQ_API_KEY"])
     L_USER = st.secrets["LOGIN_USER"]
     L_PWD = st.secrets["LOGIN_PASSWORD"]
-    client = Groq(api_key=GROQ_KEY)
 except Exception as e:
-    st.error("Бро, проверь Secrets в настройках Streamlit Cloud! Нужны: GROQ_API_KEY, LOGIN_USER, LOGIN_PASSWORD")
+    st.error("Настрой Secrets: GROQ_API_KEY, LOGIN_USER, LOGIN_PASSWORD")
     st.stop()
 
-# --- ЛОГИКА ВХОДА ---
+# 4. АВТОРИЗАЦИЯ
 if "auth" not in st.session_state:
     st.session_state.auth = False
 
 if not st.session_state.auth:
-    st.markdown('<div class="login-container">', unsafe_allow_html=True)
-    st.title("🌑 LUVVU OS LOGIN")
-    user_input = st.text_input("ID")
-    pass_input = st.text_input("KEY", type="password")
-    if st.button("INITIALIZE"):
-        if user_input == L_USER and pass_input == L_PWD:
+    st.title("🌑 LUVVU OS INITIALIZATION")
+    u = st.text_input("USER ID")
+    p = st.text_input("ACCESS KEY", type="password")
+    if st.button("CONNECT"):
+        if u == L_USER and p == L_PWD:
             st.session_state.auth = True
             st.rerun()
         else:
             st.error("ACCESS DENIED")
-    st.markdown('</div>', unsafe_allow_html=True)
     st.stop()
 
-# --- ОСНОВНОЙ ИНТЕРФЕЙС ---
+# 5. ИНТЕРФЕЙС И ГРОК (Твой мудрый бро)
 st.title("🌑 Luvvu Intelligence")
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
-# Вывод сообщений (используем стандартные чат-элементы, которые подхватят твой CSS)
-for msg in st.session_state.messages:
-    with st.chat_message(msg["role"]):
-        st.write(msg["content"])
+for m in st.session_state.messages:
+    with st.chat_message(m["role"]):
+        st.write(m["content"])
 
-# Поле ввода
 if prompt := st.chat_input("На связи, бро..."):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):
@@ -60,18 +63,18 @@ if prompt := st.chat_input("На связи, бро..."):
     with st.chat_message("assistant"):
         # Промпт Мудрого Бро
         SYSTEM_PROMPT = (
-            "Ты — Luvvu AI, бро и цифровой ментор. Твой стиль — уверенный, лаконичный, пацанский, но глубоко мудрый. "
-            "Ты общаешься на 'ты'. Ты не робот, ты решала. Даешь жесткие и мудрые советы. "
+            "Ты — Luvvu AI, бро и цифровой ментор. Твой стиль — уверенный, лаконичный, пацанский, но мудрый. "
+            "Ты общаешься на 'ты'. Не используй клише. Ты решала. "
             "Ценишь стиль 'old money', дисциплину и бренд Erryssence."
         )
         
         try:
-            response = client.chat.completions.create(
+            chat_completion = client.chat.completions.create(
                 model="llama-3.3-70b-versatile",
                 messages=[{"role": "system", "content": SYSTEM_PROMPT}] + st.session_state.messages[-10:]
             )
-            answer = response.choices[0].message.content
-            st.write(answer)
-            st.session_state.messages.append({"role": "assistant", "content": answer})
+            response = chat_completion.choices[0].message.content
+            st.write(response)
+            st.session_state.messages.append({"role": "assistant", "content": response})
         except Exception as e:
-            st.error("Связь с ядром прервана. Проверь API ключ.")
+            st.error(f"Ошибка ядра: {e}")
