@@ -14,7 +14,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User>(null);
 
   const login = async (email: string, password: string) => {
-    // Фиксированный логин/пароль
+    // Только один логин и пароль
     if (email === 'luvvu_admin' && password === 'luvvu2025') {
       setUser({ email });
       return true;
