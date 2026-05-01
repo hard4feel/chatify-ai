@@ -37,8 +37,8 @@
   --color-ember: var(--ember);
   --color-ember-foreground: var(--ember-foreground);
 
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Space Grotesk", "Inter", sans-serif;
+  --font-sans: "Nunito", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Fraunces", "Nunito", serif;
 
   --shadow-glow: 0 0 40px -10px var(--ember);
   --shadow-soft: 0 8px 30px -12px oklch(0 0 0 / 0.35);
