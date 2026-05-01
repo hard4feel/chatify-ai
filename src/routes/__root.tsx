@@ -116,7 +116,7 @@ function AuthedLayout() {
             <Menu className="h-5 w-5" />
           </button>
           <div className="flex items-center gap-2 font-display font-semibold">
-            <Flame className="h-4 w-4 text-ember" />
+            <img src={heartLogo} alt="" className="h-5 w-5" />
             Luvvu
           </div>
           <div className="w-9" />
@@ -143,13 +143,11 @@ function Sidebar() {
 
   return (
     <div className="flex h-full flex-col">
-      <div className="flex items-center gap-2 px-5 py-5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-ember">
-          <Flame className="h-5 w-5 text-ember-foreground" />
-        </div>
+      <div className="flex items-center gap-3 px-5 py-5">
+        <img src={heartLogo} alt="Luvvu" className="h-10 w-10" />
         <div>
-          <div className="font-display text-lg font-semibold leading-none">Luvvu</div>
-          <div className="text-xs text-muted-foreground">минималистичный AI</div>
+          <div className="font-display text-xl font-semibold leading-none">Luvvu</div>
+          <div className="mt-1 text-xs text-muted-foreground">тёплый AI рядом с тобой</div>
         </div>
       </div>
 
