@@ -98,16 +98,16 @@
   --destructive-foreground: oklch(0.98 0.005 70);
   --border: oklch(0.32 0.015 35);
   --input: oklch(0.32 0.015 35);
-  --ring: oklch(0.68 0.19 40);
+  --ring: oklch(0.72 0.14 35);
 
-  --ember: oklch(0.7 0.2 40);
-  --ember-foreground: oklch(0.18 0.005 60);
+  --ember: oklch(0.74 0.15 35);
+  --ember-foreground: oklch(0.21 0.012 35);
 
-  --sidebar: oklch(0.16 0.005 60);
-  --sidebar-foreground: oklch(0.92 0.005 60);
-  --sidebar-border: oklch(0.27 0.006 60);
-  --sidebar-accent: oklch(0.27 0.007 60);
-  --sidebar-accent-foreground: oklch(0.96 0.005 60);
+  --sidebar: oklch(0.19 0.012 35);
+  --sidebar-foreground: oklch(0.94 0.015 70);
+  --sidebar-border: oklch(0.3 0.014 35);
+  --sidebar-accent: oklch(0.3 0.016 35);
+  --sidebar-accent-foreground: oklch(0.96 0.015 70);
 }
 
 @layer base {
