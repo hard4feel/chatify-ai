@@ -1,38 +1,38 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { createContext, useContext, useState, ReactNode } from 'react';
 
-type User = { email: string };
-type AuthCtx = {
-  user: User | null;
-  login: (email: string) => void;
+type User = { email: string } | null;
+
+type AuthContextType = {
+  user: User;
+  login: (email: string, password: string) => Promise<boolean>;
   logout: () => void;
 };
 
-const Ctx = createContext<AuthCtx | null>(null);
-const KEY = "luvvu-user";
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [user, setUser] = useState<User | null>(null);
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User>(null);
 
-  useEffect(() => {
-    const raw = localStorage.getItem(KEY);
-    if (raw) setUser(JSON.parse(raw));
-  }, []);
-
-  const login = (email: string) => {
-    const u = { email };
-    localStorage.setItem(KEY, JSON.stringify(u));
-    setUser(u);
-  };
-  const logout = () => {
-    localStorage.removeItem(KEY);
-    setUser(null);
+  const login = async (email: string, password: string) => {
+    // Фиксированный логин/пароль
+    if (email === 'luvvu_admin' && password === 'luvvu2025') {
+      setUser({ email });
+      return true;
+    }
+    return false;
   };
 
-  return <Ctx.Provider value={{ user, login, logout }}>{children}</Ctx.Provider>;
+  const logout = () => setUser(null);
+
+  return (
+    <AuthContext.Provider value={{ user, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const c = useContext(Ctx);
-  if (!c) throw new Error("useAuth must be in AuthProvider");
-  return c;
+  const ctx = useContext(AuthContext);
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider');
+  return ctx;
 }
