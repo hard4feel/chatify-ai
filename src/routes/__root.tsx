@@ -3,7 +3,8 @@ import appCss from "../styles.css?url";
 import { ThemeProvider } from "@/lib/theme";
 import { AuthProvider, useAuth } from "@/lib/auth";
 import { useEffect, useState } from "react";
-import { MessageSquare, Briefcase, Plug, Settings, LogOut, Menu, X, Flame } from "lucide-react";
+import { MessageSquare, Briefcase, Plug, Settings, LogOut, Menu } from "lucide-react";
+import heartLogo from "@/assets/luvvu-heart.png";
 
 function NotFoundComponent() {
   return (
@@ -24,14 +25,14 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Luvvu — минималистичный AI-чат" },
-      { name: "description", content: "Luvvu: чистый минималистичный интерфейс для общения с AI." },
+      { title: "Luvvu — тёплый AI для поддержки и своего круга" },
+      { name: "description", content: "Luvvu — уютный AI-собеседник, который поддержит и поможет найти своих." },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" },
+      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&display=swap" },
     ],
   }),
   shellComponent: RootShell,
